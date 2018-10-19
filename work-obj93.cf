@@ -1,0 +1,19 @@
+v 3
+file . "pc_rom.vhd" "20181019234149.000" "20181019204152.868":
+  entity pc_rom at 1( 0) + 0 on 65;
+  architecture a_pc_rom of pc_rom at 15( 301) + 0 on 66;
+file . "pc16bits.vhd" "20181019233932.000" "20181019204152.792":
+  entity pc16bits at 1( 0) + 0 on 63;
+  architecture a_pc16bits of pc16bits at 16( 287) + 0 on 64;
+file . "rom.vhd" "20181019222658.000" "20181019204152.634":
+  entity rom at 1( 0) + 0 on 59;
+  architecture a_rom of rom at 12( 208) + 0 on 60;
+file . "flipflop_T.vhd" "20181013171805.000" "20181019204152.490":
+  entity flipflop_t at 1( 0) + 0 on 55;
+  architecture a_flipflop_t of flipflop_t at 14( 211) + 0 on 56;
+file . "mux16bits.vhd" "20181019222617.000" "20181019204152.563":
+  entity mux16bits at 1( 0) + 0 on 57;
+  architecture a_mux16bits of mux16bits at 12( 249) + 0 on 58;
+file . "reg16bits.vhd" "20181019223838.000" "20181019204152.706":
+  entity reg16bits at 1( 0) + 0 on 61;
+  architecture a_reg16bits of reg16bits at 15( 261) + 0 on 62;
