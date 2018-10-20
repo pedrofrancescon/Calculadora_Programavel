@@ -3,36 +3,35 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity un_controle is
-	port( clk: in std_logic;
-        rst: in std_logic;
-		    pc_wr_en: out std_logic;
-        jump_en: out std_logic;
-        endereco: out unsigned (14 downto 0);
-		    instr: in unsigned(31 downto 0)
+	port(clk: in std_logic;
+         rst: in std_logic;
+		 pc_wr_en: out std_logic;
+		 regs_wr_en: out std_logic;
+         jump_en: out std_logic;
+		 opcode: in unsigned(3 downto 0)
 	);
 end entity;
 
 architecture a_un_controle of un_controle is
 
-	component flipflop_T
-    	port( clk: in std_logic;
-		  	    rst: in std_logic;
-		  	    wr_en: in std_logic;
-		  	    data_out: out std_logic
-		);
+	component maqEstados -- flipflop_T substituido por maquina de estados
+	port( clk: in std_logic;
+		  rst: in std_logic;
+		  opcode : in unsigned(4 downto 0);
+		  estado : out unsigned(1 downto 0)
+	);
    	end component;
 
-    signal opcode: unsigned(4 downto 0);
-    signal estado: std_logic;
-
+	signal estado: unsigned(1 downto 0);
     begin
 
-    maqEstados: flipflop_T port map(clk=>clk, rst=>rst, wr_en=>'1', data_out=>estado);
+    maqEstados: maqEstados port map(clk=>clk, rst=>rst, opcode=>opcode, estado=>estado);
 
-    opcode <= instr(10 downto 6);
-    endereco <= instr(25 downto 11);
-    jump_en <= '1' when opcode="11111" else
+    jump_en <= '1' when opcode="11111" else --redefinir para cada estado
     '0';
     pc_wr_en <= '1' when estado='0' else
     '0';
+	regs_wr_en <= '1' when opcode="11111" else
+    '0';
+
 end architecture;
