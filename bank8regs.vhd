@@ -70,7 +70,7 @@ architecture a_bank8regs of bank8regs is
 		r6: reg16bits port map( rst=>rst , wr_en=>en6 , data_in=>dataIn , data_out=>out_6 , clk=>clk );
 		r7: reg16bits port map( rst=>rst , wr_en=>en7 , data_in=>dataIn , data_out=>out_7 , clk=>clk );
 
-		mux1Out: mux16bits port map( entr0=>out_0 , entr1=>out_1 , entr2=>out_2 , entr3=>out_3 , entr4=>out_4 , entr5=>out_5 , entr6=>out_6 , entr7=>out_7 , sel=>selOut1 , saida=>out1 );
-		mux2Out: mux16bits port map( entr0=>out_0 , entr1=>out_1 , entr2=>out_2 , entr3=>out_3 , entr4=>out_4 , entr5=>out_5 , entr6=>out_6 , entr7=>out_7 , sel=>selOut2 , saida=>out2 );
+		mux1Out: mux16b_8in port map( entr0=>out_0 , entr1=>out_1 , entr2=>out_2 , entr3=>out_3 , entr4=>out_4 , entr5=>out_5 , entr6=>out_6 , entr7=>out_7 , sel=>selOut1 , saida=>out1 );
+		mux2Out: mux16b_8in port map( entr0=>out_0 , entr1=>out_1 , entr2=>out_2 , entr3=>out_3 , entr4=>out_4 , entr5=>out_5 , entr6=>out_6 , entr7=>out_7 , sel=>selOut2 , saida=>out2 );
 
 end architecture;

@@ -3,11 +3,14 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity processador is
+    port (clk: in std_logic;
+          rst: in std_logic
+    );
 end entity;
 
-architecture a_processador of a_processador is
+architecture a_processador of processador is
 
-    component pc
+    component pc16bits
         port( clk: in std_logic;
     		  rst: in std_logic;
     		  wr_en: in std_logic;
@@ -30,6 +33,9 @@ architecture a_processador of a_processador is
              pc_wr_en: out std_logic;
              regs_wr_en: out std_logic;
              jump_en: out std_logic;
+             origemJump: out std_logic;
+             operacao: out unsigned(1 downto 0);
+             tipoOperacao: out std_logic;
              opcode: in unsigned(3 downto 0)
         );
     end component;
@@ -39,7 +45,8 @@ architecture a_processador of a_processador is
     		  opcode : out unsigned(3 downto 0);
               valor : out unsigned(15 downto 0);
               selReg1 : out unsigned(2 downto 0);
-    		  selReg2 : out unsigned(2 downto 0)
+    		  selReg2 : out unsigned(2 downto 0);
+              endereco: out unsigned(15 downto 0)
     	);
     end component;
 
@@ -74,8 +81,60 @@ architecture a_processador of a_processador is
     end component;
 
 
-    signal DadoPcToRom : unsigned(15 downto 0); --falta um monte
+    signal endPcPraRom, opCode, busDecPraUla, busReg1ToMuxs, busReg2ToUla: unsigned(15 downto 0);
+    signal dadoUlaToRegs, muxPraUla, endDecPraMuxPc, endMuxProPc: unsigned(15 downto 0);
+    signal endRomProDec: unsigned(14 downto 0);
+    signal codigo: unsigned(3 downto 0);
+    signal selDecProReg1, selDecProReg2: unsigned(2 downto 0);
+    signal pule, escrevaPC, escrevaReg, opImediata, RegOuDec, lixo: std_logic;
+    signal calculeIsto: unsigned(1 downto 0);
 
 begin
+    memProg: rom port map(clk=>clk,
+                          endereco=>endPcPraRom,
+                          dado=>endRomProDec);
+    contador: pc16bits port map(clk=>clk,
+                                rst=>rst,
+                                wr_en=>escrevaPC,
+                                jump_en=>pule,
+                                data_in=>endMuxProPc,
+                                data_out=>endPcPraRom);
+    decodificador: decoder port map(instr=>endRomProDec,
+                                    opcode=>codigo,
+                                    valor=>busDecPraUla,
+                                    selReg1=>selDecProReg1,
+                                    selReg2=>selDecProReg2,
+                                    endereco=>endDecPraMuxPc);
+    unidControle: un_controle port map( clk=>clk,
+                                        rst=>rst,
+                                        pc_wr_en=>escrevaPC,
+                                        regs_wr_en=>escrevaReg,
+                                        jump_en=>pule,
+                                        origemJump=>RegOuDec,
+                                        operacao=>calculeIsto,
+                                        tipoOperacao=>opImediata,
+                                        opcode=>codigo);
+    bancoReg: bank8regs port map(selOut1=>selDecProReg1,
+                                 selOut2=>selDecProReg2,
+                                 dataIn=>dadoUlaToRegs,
+                                 selIn=>selDecProReg2,
+                                 wr_en=>escrevaReg,
+                                 clk=>clk,
+                                 rst=>rst,
+                                 out1=>busReg1ToMuxs,
+                                 out2=>busReg2ToUla);
+    unLogArit: ula port map(entr0=>muxPraUla,
+                            entr1=>busReg2ToUla,
+                            sel=>calculeIsto,
+                            result=>dadoUlaToRegs,
+                            maiorIgual=>lixo);
+    MuxOpIR: mux16b_2in port map(entr0=>busReg1ToMuxs,
+                                entr1=>busDecPraUla,
+                                sel=>opImediata,
+                                saida=>muxPraUla);
+    MuxPCjump: mux16b_2in port map(entr0=>busReg1ToMuxs,
+                                   entr1=>endDecPraMuxPc,
+                                   sel=>RegOuDec,
+                                   saida=>endMuxProPc);
 
 end architecture;

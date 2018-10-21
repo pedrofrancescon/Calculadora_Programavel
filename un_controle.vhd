@@ -8,16 +8,19 @@ entity un_controle is
 		 pc_wr_en: out std_logic;
 		 regs_wr_en: out std_logic;
          jump_en: out std_logic;
+		 origemJump: out std_logic;
+		 operacao: out unsigned(1 downto 0);
+		 tipoOperacao: out std_logic; --R ou I
 		 opcode: in unsigned(3 downto 0)
 	);
 end entity;
 
 architecture a_un_controle of un_controle is
 
-	component maqEstados -- flipflop_T substituido por maquina de estados
+	component maquinaEst -- flipflop_T substituido por maquina de estados
 	port( clk: in std_logic;
 		  rst: in std_logic;
-		  opcode : in unsigned(4 downto 0);
+		  opcode : in unsigned(3 downto 0);
 		  estado : out unsigned(1 downto 0)
 	);
    	end component;
@@ -27,11 +30,21 @@ architecture a_un_controle of un_controle is
 
     maqEstados: maqEstados port map(clk=>clk, rst=>rst, opcode=>opcode, estado=>estado);
 
-    jump_en <= '1' when opcode="11111" else --redefinir para cada estado
+    jump_en <= '1' when opcode="0110" and estado="11" else --redefinir para cada estado
     '0';
-    pc_wr_en <= '1' when estado='0' else
+    pc_wr_en <= '1' when estado="00" else
     '0';
-	regs_wr_en <= '1' when opcode="11111" else
+	regs_wr_en <= '1' when opcode!="0110" else
     '0';
+	origemJump <= '1' when opcode="0110" else
+	'0';
+	operacao <= "00" when opcode="0001" or opcode="0010" else --soma
+	 			"01" when opcode="0011" or opcode="0100" else --subtracao
+	 			"00";
+	tipoOperacao <= '0' when estado="01" else --R
+					'1' when estado="10" else --I
+					'0';
+
+
 
 end architecture;

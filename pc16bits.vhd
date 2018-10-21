@@ -23,7 +23,7 @@ architecture a_pc16bits of pc16bits is
 			);
     end component;
 
-	component mux16bits
+	component mux16b_2in
 	port(entr0 : in unsigned(15 downto 0);
 		 entr1 : in unsigned(15 downto 0);
 		 sel : in std_logic;
@@ -38,7 +38,7 @@ architecture a_pc16bits of pc16bits is
     begin
 		reg: reg16bits port map(clk=>clk, rst=>rst, wr_en=>wr_en, data_in=>selecionado, data_out=>data_o);
 
-		esc: mux16bits port map(entr0=>data_i, entr1=>data_in, sel=>jump_en, saida=>selecionado);
+		esc: mux16b_2in port map(entr0=>data_i, entr1=>data_in, sel=>jump_en, saida=>selecionado);
 
 		data_i <= data_o + "0000000000000001";
 		data_out <= data_o;

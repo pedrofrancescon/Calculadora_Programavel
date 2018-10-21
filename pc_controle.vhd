@@ -27,6 +27,7 @@ architecture a_pc_controle of pc_controle is
 		  data_out: out unsigned(14 downto 0) --instrucao
 	);
 	end component;
+	
 	signal jump, pc_wr: std_logic;
 	signal endereco: unsigned(15 downto 0);
 	signal instrucao: unsigned(14 downto 0);

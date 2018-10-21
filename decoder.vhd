@@ -7,14 +7,16 @@ entity decoder is
 		  opcode : out unsigned(3 downto 0);
           valor : out unsigned(15 downto 0);
           selReg1 : out unsigned(2 downto 0);
-		  selReg2 : out unsigned(2 downto 0)
+		  selReg2 : out unsigned(2 downto 0);
+		  endereco: out unsigned(15 downto 0)
 		);
 end entity;
 
 architecture a_decoder of decoder is
 begin
 	opcode <= instr(14 downto 11);
-	valor <= instr(7 downto 0);
+	valor <= "00000000"+instr(7 downto 0);
 	selReg2 <= instr(10 downto 8);
 	selReg1 <= instr(7 downto 5);
+	endereco <= "00000"+instr(10 downto 0);
 end architecture;

@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity maquinaEst is
 	port( clk: in std_logic;
 		  rst: in std_logic;
-		  opcode : in unsigned(4 downto 0);
+		  opcode : in unsigned(3 downto 0);
  	  	  estado : out unsigned(1 downto 0)
 	);
 end entity;
@@ -20,7 +20,7 @@ begin
  	elsif rising_edge(clk) then
 	 	case estado_s is
 		 	when "00" => -- fetch
-		 		if opcode="00000" then
+		 		if opcode(0 downto 0)="1" then
 		 			estado_s <= "01";
 		 		else
 		 			estado_s <= "10";
