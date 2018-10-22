@@ -28,13 +28,13 @@ architecture a_un_controle of un_controle is
 	signal estado: unsigned(1 downto 0);
     begin
 
-    maqEstados: maqEstados port map(clk=>clk, rst=>rst, opcode=>opcode, estado=>estado);
+    maqEstados: maquinaEst port map(clk=>clk, rst=>rst, opcode=>opcode, estado=>estado);
 
     jump_en <= '1' when opcode="0110" and estado="11" else --redefinir para cada estado
     '0';
     pc_wr_en <= '1' when estado="00" else
     '0';
-	regs_wr_en <= '1' when opcode!="0110" else
+	regs_wr_en <= '1' when opcode="0110" else
     '0';
 	origemJump <= '1' when opcode="0110" else
 	'0';
