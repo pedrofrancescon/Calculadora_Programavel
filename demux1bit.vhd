@@ -19,21 +19,21 @@ end entity;
 architecture a_demux1bit of demux1bit is
 begin
 
-	 saida0 <= '1' when sel="000" else
+	 saida0 <= '1' when sel="000" and enable='1' else
 	 '0';
-	 saida1 <= '1' when sel="001" else
+	 saida1 <= '1' when sel="001" and enable='1' else
 	 '0';
-	 saida2 <= '1' when sel="010" else
+	 saida2 <= '1' when sel="010" and enable='1' else
 	 '0';
-	 saida3 <= '1' when sel="011" else
+	 saida3 <= '1' when sel="011" and enable='1' else
 	 '0';
-	 saida4 <= '1' when sel="100" else
+	 saida4 <= '1' when sel="100" and enable='1' else
 	 '0';
-	 saida5 <= '1' when sel="101" else
+	 saida5 <= '1' when sel="101" and enable='1' else
 	 '0';
-	 saida6 <= '1' when sel="110" else
+	 saida6 <= '1' when sel="110" and enable='1' else
 	 '0';
-	 saida7 <= '1' when sel="111" else
+	 saida7 <= '1' when sel="111" and enable='1' else
 	 '0';
 
 end architecture;

@@ -27,7 +27,7 @@ architecture a_pc_rom_tb of pc_rom_tb is
 							 	 	 data_out => data_out
 							   		);
 
-    	process
+    process
 	begin
 	clk <= '0';
     wait for 50 ns;

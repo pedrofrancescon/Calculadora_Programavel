@@ -34,17 +34,18 @@ architecture a_un_controle of un_controle is
     '0';
     pc_wr_en <= '1' when estado="00" else
     '0';
-	regs_wr_en <= '1' when opcode="0110" else
+	regs_wr_en <= '1' when estado="10" or estado="01"  else
     '0';
 	origemJump <= '1' when opcode="0110" else
 	'0';
-	operacao <= "00" when opcode="0001" or opcode="0010" else --soma
-	 			"01" when opcode="0011" or opcode="0100" else --subtracao
+	operacao <= "00" when opcode="0001" and estado="10" or estado="01" else --soma
+				"00" when opcode="0010" and estado="10" or estado="01" else --soma
+	 			"01" when opcode="0011" and estado="10" or estado="01" else --subtracao
+	 			"01" when opcode="0100" and estado="10" or estado="01" else --subtracao
 	 			"00";
+
 	tipoOperacao <= '0' when estado="01" else --R
 					'1' when estado="10" else --I
 					'0';
-
-
 
 end architecture;

@@ -95,7 +95,7 @@ echo
 echo "processador_tb DONE"
 echo
 
-ghdl -r processador_tb --stop-time=2000ns --wave=processador_tb.ghw
+ghdl -r processador_tb --stop-time=10000ns --wave=processador_tb.ghw
 
 echo
 echo "Ababo é tudo"

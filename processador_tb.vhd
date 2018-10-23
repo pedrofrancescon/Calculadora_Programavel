@@ -26,6 +26,14 @@ architecture a_processador_tb of processador_tb is
     wait for 50 ns;
     clk <= '1';
     wait for 50 ns;
-    end process; 	
+    end process;
+
+    process
+	begin
+	rst <= '1';
+	wait for 10 ns;
+	rst <= '0';
+	wait;
+	end process; 	
 
 end architecture;
