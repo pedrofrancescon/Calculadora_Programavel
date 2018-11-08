@@ -64,16 +64,15 @@ architecture a_processador of processador is
     end component;
 
     component ula
-        port(  entr0 : in unsigned(15 downto 0);
-               entr1 : in unsigned(15 downto 0);
-               sel : in unsigned(1 downto 0);
-               result : out unsigned(15 downto 0);
-               maiorIgual : out std_logic ;
-               CY: out std_logic;
-               OV: out std_logic;
-               S: out std_logic;
-               Z: out std_logic );
-        );
+        port( entr0 : in unsigned(15 downto 0);
+              entr1 : in unsigned(15 downto 0);
+              sel : in unsigned(1 downto 0);
+              result : out unsigned(15 downto 0);
+              maiorIgual : out std_logic; --flags status do programa PSW
+              CY: out std_logic; --se deu carry é 1
+              OV: out std_logic; --se deu overflow é 1
+              S: out std_logic; -- 0 se o resultado é positivo, 1 se negativo
+              Z: out std_logic ); --o famoso que quando é zero o zero é um
     end component;
 
     component mux16b_2in
@@ -136,10 +135,10 @@ architecture a_processador of processador is
                             entr1=>busReg2ToUla,
                             sel=>calculeIsto,
                             result=>dadoUlaToRegs,
-                            maiorIgual=>lixo;
-                            Z=>lixo;
-                            S=>lixo;
-                            OV=>lixo;
+                            maiorIgual=>lixo,
+                            Z=>lixo,
+                            S=>lixo,
+                            OV=>lixo,
                             CY=>lixo);
 
     MuxOpIR: mux16b_2in port map(entr0=>busReg1ToMuxs,
