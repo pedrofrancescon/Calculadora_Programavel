@@ -68,7 +68,11 @@ architecture a_processador of processador is
                entr1 : in unsigned(15 downto 0);
                sel : in unsigned(1 downto 0);
                result : out unsigned(15 downto 0);
-               maiorIgual : out std_logic
+               maiorIgual : out std_logic ;
+               CY: out std_logic;
+               OV: out std_logic;
+               S: out std_logic;
+               Z: out std_logic );
         );
     end component;
 
@@ -132,7 +136,11 @@ architecture a_processador of processador is
                             entr1=>busReg2ToUla,
                             sel=>calculeIsto,
                             result=>dadoUlaToRegs,
-                            maiorIgual=>lixo);
+                            maiorIgual=>lixo;
+                            Z=>lixo;
+                            S=>lixo;
+                            OV=>lixo;
+                            CY=>lixo);
 
     MuxOpIR: mux16b_2in port map(entr0=>busReg1ToMuxs,
                                 entr1=>busDecPraUla,

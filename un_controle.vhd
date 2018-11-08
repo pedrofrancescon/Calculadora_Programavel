@@ -30,8 +30,14 @@ architecture a_un_controle of un_controle is
 
     maqEstados: maquinaEst port map(clk=>clk, rst=>rst, opcode=>opcode, estado=>estado);
 
+<<<<<<< HEAD
     jump_en <= '1' when opcode="0110" and estado="00" else --redefinir para cada estado
     '0';
+=======
+    jump_en <= '1' when (opcode="0110" or opcode="1110") --casos de jump a definir
+	and estado="11" else '0';
+
+>>>>>>> a58ea650cab112f17f174b5c03b7c51003266da2
     pc_wr_en <= '1' when estado="00" else
     '0';
 	regs_wr_en <= '1' when estado="10" or estado="01"  else
