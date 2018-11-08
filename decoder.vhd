@@ -19,6 +19,8 @@ begin
 	valor <= "00000000" & instr(7 downto 0);
 	selReg2 <= instr(10 downto 8);
 	selReg1 <= instr(7 downto 5);
-	endereco <= "00000" & instr(10 downto 0);
+	endereco <=  "00000" & instr(10 downto 0) when opcode="0110" else
+		--inserir endereco por registrador when opcode="XXXX" else --depois de redefinir nossos jumps
+		"0000000000000000"; --trocar por calculo de endereço relativo
 
 end architecture;
