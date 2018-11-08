@@ -94,22 +94,22 @@ architecture a_processador of processador is
 
     begin
     memProg: rom port map(clk=>clk,
-                          endereco=>endPcPraRom,
-                          dado=>endRomProDec);
+                          endereco=>endPcPraRom, --
+                          dado=>endRomProDec); --
 
     contador: pc16bits port map(clk=>clk,
                                 rst=>rst,
                                 wr_en=>escrevaPC,
                                 jump_en=>pule,
-                                data_in=>endMuxProPc,
-                                data_out=>endPcPraRom);
+                                data_in=>endMuxProPc, --
+                                data_out=>endPcPraRom); --
 
-    decodificador: decoder port map(instr=>endRomProDec,
-                                    opcode=>codigo,
-                                    valor=>busDecPraUla,
-                                    selReg1=>selDecProReg1,
-                                    selReg2=>selDecProReg2,
-                                    endereco=>endDecPraMuxPc);
+    decodificador: decoder port map(instr=>endRomProDec, --
+                                    opcode=>codigo, --
+                                    valor=>busDecPraUla, --
+                                    selReg1=>selDecProReg1, --
+                                    selReg2=>selDecProReg2, --
+                                    endereco=>endDecPraMuxPc); --
 
     unidControle: un_controle port map( clk=>clk,
                                         rst=>rst,
@@ -121,34 +121,34 @@ architecture a_processador of processador is
                                         tipoOperacao=>opImediata,
                                         opcode=>codigo);
 
-    bancoReg: bank8regs port map(selOut1=>selDecProReg1,
-                                 selOut2=>selDecProReg2,
-                                 dataIn=>dadoUlaToRegs,
-                                 selIn=>selDecProReg2,
+    bancoReg: bank8regs port map(selOut1=>selDecProReg1, --
+                                 selOut2=>selDecProReg2, --
+                                 dataIn=>dadoUlaToRegs, --
+                                 selIn=>selDecProReg2, --
                                  wr_en=>escrevaReg,
                                  clk=>clk,
                                  rst=>rst,
-                                 out1=>busReg1ToMuxs,
-                                 out2=>busReg2ToUla);
+                                 out1=>busReg1ToMuxs, -- 
+                                 out2=>busReg2ToUla); -- 
 
-    unLogArit: ula port map(entr0=>muxPraUla,
-                            entr1=>busReg2ToUla,
+    unLogArit: ula port map(entr0=>muxPraUla, -- 
+                            entr1=>busReg2ToUla, -- 
                             sel=>calculeIsto,
-                            result=>dadoUlaToRegs,
+                            result=>dadoUlaToRegs, --
                             maiorIgual=>lixo,
                             Z=>lixo,
                             S=>lixo,
                             OV=>lixo,
                             CY=>lixo);
 
-    MuxOpIR: mux16b_2in port map(entr0=>busReg1ToMuxs,
-                                entr1=>busDecPraUla,
+    MuxOpIR: mux16b_2in port map(entr0=>busReg1ToMuxs, -- 
+                                entr1=>busDecPraUla, -- 
                                 sel=>opImediata,
-                                saida=>muxPraUla);
+                                saida=>muxPraUla); -- 
 
-    MuxPCjump: mux16b_2in port map(entr0=>busReg1ToMuxs,
-                                   entr1=>endDecPraMuxPc,
-                                   sel=>RegOuDec,
-                                   saida=>endMuxProPc);
+    MuxPCjump: mux16b_2in port map(entr0=>endDecPraMuxPc, -- endDecPraMuxPc
+                                   entr1=>busReg2ToUla, -- busReg1ToMuxs
+                                   sel=>RegOuDec, --
+                                   saida=>endMuxProPc); --
 
 end architecture;
