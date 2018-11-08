@@ -1,3 +1,5 @@
 *
 !*.vhd
 !*.command
+!*.docx
+!*.pdf
