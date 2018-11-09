@@ -85,14 +85,18 @@ architecture a_processador of processador is
 
 
     signal endPcPraRom, busDecPraUla, busReg1ToMuxs, busReg2ToUla: unsigned(15 downto 0);
-    signal dadoUlaToRegs, muxPraUla, endDecPraMuxPc, endMuxProPc: unsigned(15 downto 0);
+    signal dadoUlaToRegs, muxPraUla, endDecPraMux,endMuxPraMuxPc,endMuxProPc: unsigned(15 downto 0);
     signal endRomProDec: unsigned(14 downto 0);
     signal codigo: unsigned(3 downto 0);
     signal selDecProReg1, selDecProReg2: unsigned(2 downto 0);
     signal pule, escrevaPC, escrevaReg, opImediata, RegOuDec, lixo, zero, negativo, overflow, carry: std_logic;
     signal calculeIsto: unsigned(1 downto 0);
+    signal constantePulo: unsigned(15 downto 0);
 
     begin
+
+    constantePulo <= "0000000000000001";
+
     memProg: rom port map(clk=>clk,
                           endereco=>endPcPraRom, --
                           dado=>endRomProDec); --
@@ -109,7 +113,7 @@ architecture a_processador of processador is
                                     valor=>busDecPraUla, --
                                     selReg1=>selDecProReg1, --
                                     selReg2=>selDecProReg2, --
-                                    endereco=>endDecPraMuxPc); --
+                                    endereco=>endDecPraMux); --
 
     unidControle: un_controle port map( clk=>clk,
                                         rst=>rst,
@@ -146,8 +150,13 @@ architecture a_processador of processador is
                                 sel=>opImediata,
                                 saida=>muxPraUla); --
 
-    MuxPCjump: mux16b_2in port map(entr0=>endDecPraMuxPc, -- endDecPraMuxPc
-                                   entr1=>busReg2ToUla, -- busReg1ToMuxs
+    MuxConstOuDec: mux16b_2in port map(entr0=>constantePulo, 
+                                   entr1=>endDecPraMux, 
+                                   sel=>negativo, --
+                                   saida=>endMuxPraMuxPc); --
+
+    MuxPCjump: mux16b_2in port map(entr0=>endMuxPraMuxPc, -- 
+                                   entr1=>busReg2ToUla, -- 
                                    sel=>RegOuDec, --
                                    saida=>endMuxProPc); --
 

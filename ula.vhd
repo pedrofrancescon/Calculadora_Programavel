@@ -30,7 +30,6 @@ architecture a_ula of ula is
       result_17 <= entr0_17+entr1_17 when sel = "00" else
                 entr1_17-entr0_17 when sel = "01" else
                 entr0_17 and entr1_17 when sel = "10" else
-                entr0_17 or entr1_17 when sel = "11" else
                 "00000000000000000"; -- 17 zeros
 
       CY <= result_17(16);
@@ -40,7 +39,7 @@ architecture a_ula of ula is
       
       -- sinais para reutilizar os sinais de saida em outras saidas (?)
 
-      result_s <= result_17(15 downto 0)
+      result_s <= result_17(15 downto 0);
 
       -- atribuições
 
