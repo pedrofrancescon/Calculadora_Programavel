@@ -7,15 +7,15 @@ entity ula is
  	 entr1 : in unsigned(15 downto 0);
  	 sel : in unsigned(1 downto 0);
  	 result : out unsigned(15 downto 0);
- 	 maiorIgual : out std_logic; --flags status do programa PSW
-       CY: out std_logic; --se deu carry é 1
-       OV: out std_logic; --se deu overflow é 1
-       S: out std_logic; -- 0 se o resultado é positivo, 1 se negativo
-       Z: out std_logic ); --o famoso que quando é zero o zero é um
+ 	 maiorIgual : out std_logic; --flag antiga não usamos
+     CY: out std_logic; --se deu carry é 1
+     OV: out std_logic; --se deu overflow é 1
+     S: out std_logic; -- 0 se o resultado é positivo, 1 se negativo
+     Z: out std_logic ); --o famoso que quando é zero o zero é um
 end entity;
 
 architecture a_ula of ula is
-      
+
       signal result_s: unsigned(15 downto 0);
       signal OV_s: std_logic;
 

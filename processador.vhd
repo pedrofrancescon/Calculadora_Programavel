@@ -68,7 +68,7 @@ architecture a_processador of processador is
               entr1 : in unsigned(15 downto 0);
               sel : in unsigned(1 downto 0);
               result : out unsigned(15 downto 0);
-              maiorIgual : out std_logic; --flags status do programa PSW
+              maiorIgual : out std_logic; --flag antiga, nao estamos usando
               CY: out std_logic; --se deu carry é 1
               OV: out std_logic; --se deu overflow é 1
               S: out std_logic; -- 0 se o resultado é positivo, 1 se negativo
@@ -89,7 +89,7 @@ architecture a_processador of processador is
     signal endRomProDec: unsigned(14 downto 0);
     signal codigo: unsigned(3 downto 0);
     signal selDecProReg1, selDecProReg2: unsigned(2 downto 0);
-    signal pule, escrevaPC, escrevaReg, opImediata, RegOuDec, lixo: std_logic;
+    signal pule, escrevaPC, escrevaReg, opImediata, RegOuDec, lixo, zero, negativo, overflow, carry: std_logic;
     signal calculeIsto: unsigned(1 downto 0);
 
     begin
@@ -128,23 +128,23 @@ architecture a_processador of processador is
                                  wr_en=>escrevaReg,
                                  clk=>clk,
                                  rst=>rst,
-                                 out1=>busReg1ToMuxs, -- 
-                                 out2=>busReg2ToUla); -- 
+                                 out1=>busReg1ToMuxs, --
+                                 out2=>busReg2ToUla); --
 
-    unLogArit: ula port map(entr0=>muxPraUla, -- 
-                            entr1=>busReg2ToUla, -- 
+    unLogArit: ula port map(entr0=>muxPraUla, --
+                            entr1=>busReg2ToUla, --
                             sel=>calculeIsto,
                             result=>dadoUlaToRegs, --
                             maiorIgual=>lixo,
-                            Z=>lixo,
-                            S=>lixo,
-                            OV=>lixo,
-                            CY=>lixo);
+                            Z=>zero,
+                            S=>negativo,
+                            OV=>overflow,
+                            CY=>carry);
 
-    MuxOpIR: mux16b_2in port map(entr0=>busReg1ToMuxs, -- 
-                                entr1=>busDecPraUla, -- 
+    MuxOpIR: mux16b_2in port map(entr0=>busReg1ToMuxs, --
+                                entr1=>busDecPraUla, --
                                 sel=>opImediata,
-                                saida=>muxPraUla); -- 
+                                saida=>muxPraUla); --
 
     MuxPCjump: mux16b_2in port map(entr0=>endDecPraMuxPc, -- endDecPraMuxPc
                                    entr1=>busReg2ToUla, -- busReg1ToMuxs
