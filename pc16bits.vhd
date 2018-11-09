@@ -32,6 +32,7 @@ architecture a_pc16bits of pc16bits is
 	end component;
 
     signal data_i: unsigned(15 downto 0);
+    signal data_in_aux: unsigned(15 downto 0);
 	signal selecionado: unsigned(15 downto 0);
     signal data_o: unsigned(15 downto 0);
 
@@ -40,7 +41,9 @@ architecture a_pc16bits of pc16bits is
 
 		esc: mux16b_2in port map(entr0=>data_i, entr1=>data_in, sel=>jump_en, saida=>selecionado);
 
-		data_i <= data_o + "0000000000000001";
+		data_in_aux <= data_in;
+
+		data_i <= data_o+data_in_aux;
 		data_out <= data_o;
 
 end architecture;
