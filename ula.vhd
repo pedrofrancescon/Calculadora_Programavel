@@ -8,43 +8,52 @@ entity ula is
  	 sel : in unsigned(1 downto 0);
  	 result : out unsigned(15 downto 0);
  	 maiorIgual : out std_logic; --flag antiga não usamos
-     CY: out std_logic; --se deu carry é 1
-     OV: out std_logic; --se deu overflow é 1
-     S: out std_logic; -- 0 se o resultado é positivo, 1 se negativo
-     Z: out std_logic ); --o famoso que quando é zero o zero é um
+       CY: out std_logic; --se deu carry é 1
+       OV: out std_logic; --se deu overflow é 1
+       S: out std_logic; -- 0 se o resultado é positivo, 1 se negativo
+       Z: out std_logic ); --o famoso que quando é zero o zero é um
 end entity;
 
 architecture a_ula of ula is
 
+      signal entr0_17,entr1_17,result_17: unsigned(16 downto 0);
+
       signal result_s: unsigned(15 downto 0);
-      signal OV_s: std_logic;
 
       begin
 
-      result_s <= entr0+entr1 when sel = "00" else
-                entr1-entr0 when sel = "01" else
-                entr0 and entr1 when sel = "10" else
-                entr0 or entr1 when sel = "11" else
-                "0000000000000000"; -- saida 16 bits -> 16 zeros
+      -- tratamento de carry
 
-      OV_s <= '1' when entr0(15 downto 15)="1" and entr1(15 downto 15)="1" else
-      '0';
+      entr0_17 <= '0' & entr0;
+      entr1_17 <= '0' & entr1;
 
+      result_17 <= entr0_17+entr1_17 when sel = "00" else
+                entr1_17-entr0_17 when sel = "01" else
+                entr0_17 and entr1_17 when sel = "10" else
+                entr0_17 or entr1_17 when sel = "11" else
+                "00000000000000000"; -- 17 zeros
+
+      CY <= result_17(16);
+
+      S <= '0' when entr0<=entr1 else
+      '1';
+      
       -- sinais para reutilizar os sinais de saida em outras saidas (?)
+
+      result_s <= result_17(15 downto 0)
+
+      -- atribuições
 
       result <= result_s;
 
-	maiorIgual <= '1' when entr0 > entr1 else
-	'0';
-
-      Z <= '1' when result_s = "0000000000000000" else --não tenho certeza mas acho que tem que criar um circuitos pras operações dependerem dessas flags
+      Z <= '1' when result_s = "0000000000000000" else
       '0';
 
-      S <= '1' when result_s(15 downto 15) = "1" else
+      -- flags que não são utilizadas ainda
+
+      OV <= '0';
+
+      maiorIgual <= '1' when entr0 > entr1 else
       '0';
-
-      OV <= OV_s;
-
-      CY <= '1' when OV_s='1' else '0';
 
 end architecture;
