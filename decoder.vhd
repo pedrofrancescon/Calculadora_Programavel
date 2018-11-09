@@ -24,7 +24,8 @@ architecture a_decoder of decoder is
 
 	opcode <= opcode_s;
 	valor <= "00000000" & instr(7 downto 0);
-	selReg2 <= instr(10 downto 8);
+	selReg2 <= instr(2 downto 0) when opcode_s="0110" else 
+			   instr(10 downto 8);
 	selReg1 <= instr(7 downto 5);
 	endereco <=  "00000" & instr(10 downto 0) when opcode_s="0110" else
 	"0000000000000000"; --inserir endereco por registrador when opcode="XXXX" else --depois de redefinir nossos jumps, trocar por calculo de endereço relativo

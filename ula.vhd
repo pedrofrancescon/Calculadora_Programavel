@@ -22,7 +22,7 @@ architecture a_ula of ula is
       begin
 
       result_s <= entr0+entr1 when sel = "00" else
-                entr0-entr1 when sel = "01" else
+                entr1-entr0 when sel = "01" else
                 entr0 and entr1 when sel = "10" else
                 entr0 or entr1 when sel = "11" else
                 "0000000000000000"; -- saida 16 bits -> 16 zeros
