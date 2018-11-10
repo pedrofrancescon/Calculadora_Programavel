@@ -11,6 +11,13 @@ echo
 echo "mux2 DONE"
 echo
 
+ghdl -a flipFlop.vhd
+ghdl -e flipFlop
+
+echo
+echo "flipFlop DONE"
+echo
+
 ghdl -a mux16b_8in.vhd
 ghdl -e mux16b_8in
 

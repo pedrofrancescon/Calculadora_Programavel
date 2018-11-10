@@ -26,8 +26,8 @@ architecture a_decoder of decoder is
 	valor <= "00000000000" & instr(4 downto 0);
 	selReg2 <= instr(10 downto 8);
 	selReg1 <= instr(7 downto 5);
-	endereco <= "0000000000000" & instr(2 downto 0) when opcode_s="1010" and instr(2)='0' else
-				"1111111111111" & instr(2 downto 0) when opcode_s="1010" and instr(2)='1' else
+	endereco <= "00000" & instr(10 downto 0) when opcode_s="1010" and instr(10)='0' else
+				"11111" & instr(10 downto 0) when opcode_s="1010" and instr(10)='1' else
 				"0000000000000001"; 
 
 end architecture;

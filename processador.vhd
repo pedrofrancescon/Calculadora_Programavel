@@ -34,6 +34,7 @@ architecture a_processador of processador is
              regs_wr_en: out std_logic;
              jump_en: out std_logic;
              origemJump: out std_logic;
+             flagsRst: out std_logic;
              operacao: out unsigned(1 downto 0);
              tipoOperacao: out std_logic;
              opcode: in unsigned(3 downto 0)
@@ -79,8 +80,14 @@ architecture a_processador of processador is
         port(entr0 : in unsigned(15 downto 0);
              entr1 : in unsigned(15 downto 0);
              sel : in std_logic;
-             saida : out unsigned(15 downto 0)
-        );
+             saida : out unsigned(15 downto 0) );
+    end component;
+
+    component flipFlop
+        port( clk: in std_logic;
+              rst: in std_logic;
+              wr_en : in std_logic;
+              estado : out std_logic );
     end component;
 
 
@@ -89,7 +96,7 @@ architecture a_processador of processador is
     signal endRomProDec: unsigned(14 downto 0);
     signal codigo: unsigned(3 downto 0);
     signal selDecProReg1, selDecProReg2: unsigned(2 downto 0);
-    signal pule, escrevaPC, escrevaReg, opImediata, RegOuDec, lixo, zero, negativo, overflow, carry: std_logic;
+    signal pule, escrevaPC, escrevaReg, opImediata, RegOuDec, lixo, zero, negativo, selConstOuDec, flagsRst, overflow, carry: std_logic;
     signal calculeIsto: unsigned(1 downto 0);
     signal constantePulo: unsigned(15 downto 0);
 
@@ -115,15 +122,16 @@ architecture a_processador of processador is
                                     selReg2=>selDecProReg2, --
                                     endereco=>endDecPraMux); --
 
-    unidControle: un_controle port map( clk=>clk,
-                                        rst=>rst,
-                                        pc_wr_en=>escrevaPC,
-                                        regs_wr_en=>escrevaReg,
-                                        jump_en=>pule,
-                                        origemJump=>RegOuDec,
-                                        operacao=>calculeIsto,
-                                        tipoOperacao=>opImediata,
-                                        opcode=>codigo);
+    unidControle: un_controle port map(clk=>clk,
+                                       rst=>rst,
+                                       pc_wr_en=>escrevaPC,
+                                       regs_wr_en=>escrevaReg,
+                                       jump_en=>pule,
+                                       origemJump=>RegOuDec,
+                                       flagsRst=>flagsRst,
+                                       operacao=>calculeIsto,
+                                       tipoOperacao=>opImediata,
+                                       opcode=>codigo);
 
     bancoReg: bank8regs port map(selOut1=>selDecProReg1, --
                                  selOut2=>selDecProReg2, --
@@ -151,13 +159,18 @@ architecture a_processador of processador is
                                 saida=>muxPraUla); --
 
     MuxConstOuDec: mux16b_2in port map(entr0=>constantePulo, 
-                                   entr1=>endDecPraMux, 
-                                   sel=>negativo, --
-                                   saida=>endMuxPraMuxPc); --
+                                       entr1=>endDecPraMux, 
+                                       sel=>selConstOuDec, --
+                                       saida=>endMuxPraMuxPc); --
 
     MuxPCjump: mux16b_2in port map(entr0=>endMuxPraMuxPc, -- 
                                    entr1=>busReg2ToUla, -- 
                                    sel=>RegOuDec, --
                                    saida=>endMuxProPc); --
+
+    NegativoFlag: flipFlop port map(clk=>clk,
+                                    rst=>flagsRst,
+                                    wr_en=>negativo,
+                                    estado=>selConstOuDec);
 
 end architecture;
