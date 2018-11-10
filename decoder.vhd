@@ -23,7 +23,7 @@ architecture a_decoder of decoder is
 	-- sinais para reutilizar os sinais de saida em outras saidas (?)
 
 	opcode <= opcode_s;
-	valor <= "00000000" & instr(7 downto 0);
+	valor <= "00000000000" & instr(4 downto 0);
 	selReg2 <= instr(10 downto 8);
 	selReg1 <= instr(7 downto 5);
 	endereco <= "0000000000000" & instr(2 downto 0) when opcode_s="1010" and instr(2)='0' else

@@ -28,9 +28,17 @@ begin
 		 	when "01" => -- decode_R
 		 		estado_s <= "11";
 			when "10" => -- decode_I
-		 		estado_s <= "11";
+		 		if opcode="1010" then
+		 			estado_s <= "01";
+		 		else 
+		 			estado_s <= "11";
+		 		end if;
 		 	when "11" => -- execute
-		 		estado_s <= "00";
+		 		--if opcode="1010" then
+		 		--	estado_s <= "11";
+		 		--else 
+		 			estado_s <= "00";
+		 		--end if;
 		 	when others => -- cobre casos como "UU" ou "XX"
 		 		null;
 	 	end case;

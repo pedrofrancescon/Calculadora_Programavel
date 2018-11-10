@@ -4,10 +4,10 @@ use ieee.numeric_std.all;
 
 entity ula is
  port( entr0 : in unsigned(15 downto 0);
- 	 entr1 : in unsigned(15 downto 0);
- 	 sel : in unsigned(1 downto 0);
- 	 result : out unsigned(15 downto 0);
- 	 maiorIgual : out std_logic; --flag antiga não usamos
+ 	     entr1 : in unsigned(15 downto 0);
+ 	     sel : in unsigned(1 downto 0);
+ 	     result : out unsigned(15 downto 0);
+ 	     maiorIgual : out std_logic; --flag antiga não usamos
        CY: out std_logic; --se deu carry é 1
        OV: out std_logic; --se deu overflow é 1
        S: out std_logic; -- 0 se o resultado é positivo, 1 se negativo

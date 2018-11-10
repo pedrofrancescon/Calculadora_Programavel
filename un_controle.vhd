@@ -31,11 +31,12 @@ architecture a_un_controle of un_controle is
     maqEstados: maquinaEst port map(clk=>clk, rst=>rst, opcode=>opcode, estado=>estado);
 
     jump_en <= '1' when opcode="0110" and estado="00" else
-    		   '1' when opcode="1010" and estado="00" else 
     		   '0'; 
 
-    pc_wr_en <= '1' when estado="00" else
-    '0';
+    pc_wr_en <= '0' when estado="00" and opcode="1010" else 
+    			'1' when estado="10" and opcode="1010" else 
+    			'1' when estado="00" else
+    			'0';
 
 	regs_wr_en <= '1' when estado="10" or estado="01"  else
     '0';
@@ -43,7 +44,7 @@ architecture a_un_controle of un_controle is
 	origemJump <= '1' when opcode="0110" else
 	'0';
 
-	operacao <= "00" when opcode="0001" or opcode="0010" else --soma
+	operacao <= "00" when opcode="0001" or opcode="0010" or opcode="1100" else --soma
 	 			"01" when opcode="0011" or opcode="0100" or opcode="1010" else --subtracao ou BL
 	 			"11";
 
